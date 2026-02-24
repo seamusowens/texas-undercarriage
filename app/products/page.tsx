@@ -49,9 +49,11 @@ export default function Products() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map(product => (
           <div key={product.id} className="border rounded-lg p-4 shadow">
-            <div className="bg-gray-200 h-48 mb-4 flex items-center justify-center">
-              <span className="text-gray-500">Image Placeholder</span>
-            </div>
+            <img 
+              src={`https://placehold.co/400x300/e5e7eb/6b7280?text=${encodeURIComponent(product.partName.substring(0, 20))}`}
+              alt={product.partName}
+              className="w-full h-48 object-cover mb-4 rounded"
+            />
             <h3 className="font-bold text-lg">{product.partName}</h3>
             <p className="text-sm text-gray-600">Part #: {product.partNumber}</p>
             <p className="text-sm text-gray-600">Profile: {product.profile}</p>
