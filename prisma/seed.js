@@ -6,6 +6,9 @@ const path = require('path');
 const prisma = new PrismaClient();
 
 async function main() {
+  // Clear existing products
+  await prisma.product.deleteMany({});
+  
   const workbook = XLSX.readFile(path.join(__dirname, 'trackshoe.xlsx'));
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const data = XLSX.utils.sheet_to_json(sheet);
