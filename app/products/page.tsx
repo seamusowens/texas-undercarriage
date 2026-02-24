@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useCart } from '../providers'
 
@@ -14,7 +14,7 @@ type Product = {
   price: number
 }
 
-export default function Products() {
+function ProductsContent() {
   const searchParams = useSearchParams()
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
@@ -75,5 +75,13 @@ export default function Products() {
         ))}
       </div>
     </div>
+  )
+}
+
+export default function Products() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductsContent />
+    </Suspense>
   )
 }
