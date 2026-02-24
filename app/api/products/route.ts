@@ -11,9 +11,9 @@ export async function GET(req: Request) {
       AND: [
         search ? {
           OR: [
-            { partNumber: { contains: search, mode: 'insensitive' } },
-            { partName: { contains: search, mode: 'insensitive' } },
-            { supplierName: { contains: search, mode: 'insensitive' } },
+            { partNumber: { contains: search } },
+            { partName: { contains: search } },
+            { supplierName: { contains: search } },
           ]
         } : {},
         profile ? { profile: { contains: profile } } : {}
