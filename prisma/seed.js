@@ -6,7 +6,7 @@ const path = require('path');
 const prisma = new PrismaClient();
 
 async function main() {
-  const workbook = XLSX.readFile(path.join(process.env.HOME, '914Systems/Tao_Link/Inventory/trackshoe.xlsx'));
+  const workbook = XLSX.readFile(path.join(__dirname, 'trackshoe.xlsx'));
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const data = XLSX.utils.sheet_to_json(sheet);
 
