@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useCart } from '../providers'
 
 type Product = {
@@ -14,9 +15,10 @@ type Product = {
 }
 
 export default function Products() {
+  const searchParams = useSearchParams()
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
-  const [profile, setProfile] = useState('')
+  const [profile, setProfile] = useState(searchParams.get('profile') || '')
   const { addToCart } = useCart()
   
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function Products() {
   
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
+      <h1 className="text-3xl font-bold mb-6">Products{profile && ` - ${profile}`}</h1>
       
       <div className="mb-6 flex gap-4">
         <input
