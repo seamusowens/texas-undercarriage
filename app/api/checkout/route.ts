@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import Stripe from 'stripe'
 import prisma from '@/lib/prisma'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-12-18.acacia' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2026-01-28.clover' })
 
 export async function POST(req: Request) {
   const session = await getServerSession()
