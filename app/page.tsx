@@ -9,7 +9,11 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/products/categories')
       .then(res => res.json())
-      .then(data => setCategories(data.slice(0, 10)))
+      .then(data => {
+        console.log('Categories:', data)
+        setCategories(data.slice(0, 10))
+      })
+      .catch(err => console.error('Error fetching categories:', err))
   }, [])
 
   return (
@@ -26,18 +30,22 @@ export default function Home() {
       
       <div className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold mb-8 text-center">Shop by Category</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
-          {categories.map(cat => (
-            <Link 
-              key={cat.profile}
-              href={`/products?profile=${encodeURIComponent(cat.profile)}`}
-              className="border rounded-lg p-6 text-center hover:shadow-lg hover:border-blue-500 transition"
-            >
-              <h3 className="font-bold text-lg mb-2">{cat.profile}</h3>
-              <p className="text-sm text-gray-600">{cat.count} parts</p>
-            </Link>
-          ))}
-        </div>
+        {categories.length === 0 ? (
+          <p className="text-center text-gray-600 mb-16">Loading categories...</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
+            {categories.map(cat => (
+              <Link 
+                key={cat.profile}
+                href={`/products?profile=${encodeURIComponent(cat.profile)}`}
+                className="border rounded-lg p-6 text-center hover:shadow-lg hover:border-blue-500 transition"
+              >
+                <h3 className="font-bold text-lg mb-2">{cat.profile}</h3>
+                <p className="text-sm text-gray-600">{cat.count} parts</p>
+              </Link>
+            ))}
+          </div>
+        )}
 
         <h2 className="text-3xl font-bold mb-8 text-center">Why Choose Us</h2>
         <div className="grid md:grid-cols-3 gap-8">
