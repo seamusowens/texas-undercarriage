@@ -34,54 +34,58 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <div 
-        className="relative bg-blue-600 text-white py-20 transition-all duration-1000"
+        className="relative text-white py-24 md:py-32 transition-all duration-1000 border-b-4 border-orange-600"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${backgroundImages[currentImageIndex]})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${backgroundImages[currentImageIndex]})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl font-bold mb-4">Texas Undercarriage</h1>
-          <p className="text-xl mb-8">Premium Undercarriage Parts for Heavy Machinery</p>
-          <Link href="/products" className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">
-            Browse All Products
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-wider text-orange-500 drop-shadow-lg">
+            TEXAS UNDERCARRIAGE
+          </h1>
+          <p className="text-lg md:text-2xl mb-8 text-gray-200 font-light">
+            Premium Undercarriage Parts for Heavy Machinery
+          </p>
+          <Link href="/products" className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg font-bold text-lg inline-block transition shadow-2xl transform hover:scale-105">
+            BROWSE ALL PRODUCTS
           </Link>
         </div>
       </div>
       
-      <div className="container mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">Shop by Category</h2>
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-orange-500 tracking-wider">SHOP BY CATEGORY</h2>
         {categories.length === 0 ? (
-          <p className="text-center text-gray-600 mb-16">Loading categories...</p>
+          <p className="text-center text-gray-400 mb-16">Loading categories...</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
             {categories.map(cat => (
               <Link 
                 key={cat.profile}
                 href={`/products?profile=${encodeURIComponent(cat.profile)}`}
-                className="border rounded-lg p-6 text-center hover:shadow-lg hover:border-blue-500 transition"
+                className="card p-4 md:p-6 text-center hover:shadow-2xl transition transform hover:scale-105"
               >
-                <h3 className="font-bold text-lg mb-2">{cat.profile}</h3>
-                <p className="text-sm text-gray-600">{cat.count} parts</p>
+                <h3 className="font-bold text-base md:text-lg mb-2 text-orange-400">{cat.profile}</h3>
+                <p className="text-xs md:text-sm text-gray-400">{cat.count} parts</p>
               </Link>
             ))}
           </div>
         )}
 
-        <h2 className="text-3xl font-bold mb-8 text-center">Why Choose Us</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <h3 className="text-xl font-bold mb-2">Quality Parts</h3>
-            <p>High-quality undercarriage components for all major brands</p>
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-orange-500 tracking-wider">WHY CHOOSE US</h2>
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="card p-6 text-center">
+            <h3 className="text-xl font-bold mb-2 text-orange-400">Quality Parts</h3>
+            <p className="text-gray-300">High-quality undercarriage components for all major brands</p>
           </div>
-          <div className="text-center">
-            <h3 className="text-xl font-bold mb-2">Fast Shipping</h3>
-            <p>Quick delivery to keep your equipment running</p>
+          <div className="card p-6 text-center">
+            <h3 className="text-xl font-bold mb-2 text-orange-400">Fast Shipping</h3>
+            <p className="text-gray-300">Quick delivery to keep your equipment running</p>
           </div>
-          <div className="text-center">
-            <h3 className="text-xl font-bold mb-2">Expert Support</h3>
-            <p>Knowledgeable team ready to help you find the right parts</p>
+          <div className="card p-6 text-center">
+            <h3 className="text-xl font-bold mb-2 text-orange-400">Expert Support</h3>
+            <p className="text-gray-300">Knowledgeable team ready to help you find the right parts</p>
           </div>
         </div>
       </div>
