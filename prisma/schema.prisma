@@ -12,6 +12,7 @@ model User {
   email     String   @unique
   password  String
   name      String?
+  role      String   @default("customer")
   orders    Order[]
   createdAt DateTime @default(now())
 }
@@ -35,19 +36,21 @@ model Product {
 }
 
 model Order {
-  id          String      @id @default(cuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
-  total       Float
-  status      String      @default("pending")
-  items       OrderItem[]
-  createdAt   DateTime    @default(now())
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  total           Float
+  shippingCost    Float       @default(0)
+  status          String      @default("pending")
+  shippingAddress String?
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
 }
 
 model OrderItem {
   id        String  @id @default(cuid())
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId String
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
