@@ -9,12 +9,13 @@ async function checkAdmin() {
   return user?.role === 'admin'
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!await checkAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   
+  const { id } = await params
   const data = await req.json()
   const product = await prisma.product.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       partName: data.partName,
       partNumber: data.partNumber,
@@ -25,9 +26,10 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   return NextResponse.json(product)
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!await checkAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   
-  await prisma.product.delete({ where: { id: params.id } })
+  const { id } = await params
+  await prisma.product.delete({ where: { id } })
   return NextResponse.json({ success: true })
 }
