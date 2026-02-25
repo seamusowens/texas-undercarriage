@@ -19,6 +19,7 @@ function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
   const [profile, setProfile] = useState(searchParams.get('profile') || '')
+  const [addedToCart, setAddedToCart] = useState<string | null>(null)
   const { addToCart } = useCart()
   
   useEffect(() => {
@@ -26,6 +27,12 @@ function ProductsContent() {
       .then(res => res.json())
       .then(setProducts)
   }, [search, profile])
+
+  const handleAddToCart = (product: Product) => {
+    addToCart({ id: product.id, quantity: 1, partName: product.partName, price: product.price })
+    setAddedToCart(product.id)
+    setTimeout(() => setAddedToCart(null), 2000)
+  }
   
   return (
     <div>
@@ -65,10 +72,14 @@ function ProductsContent() {
             <div className="flex justify-between items-center">
               <span className="text-xl font-bold">${product.price}</span>
               <button
-                onClick={() => addToCart({ id: product.id, quantity: 1, partName: product.partName, price: product.price })}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={() => handleAddToCart(product)}
+                className={`px-4 py-2 rounded transition ${
+                  addedToCart === product.id 
+                    ? 'bg-green-600 text-white' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
               >
-                Add to Cart
+                {addedToCart === product.id ? '✓ Added!' : 'Add to Cart'}
               </button>
             </div>
           </div>
