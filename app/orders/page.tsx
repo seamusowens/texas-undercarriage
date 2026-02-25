@@ -34,7 +34,12 @@ export default function Orders() {
       fetch('/api/orders')
         .then(res => res.json())
         .then(data => {
-          setOrders(data)
+          setOrders(Array.isArray(data) ? data : [])
+          setLoading(false)
+        })
+        .catch(err => {
+          console.error('Failed to load orders:', err)
+          setOrders([])
           setLoading(false)
         })
     }
