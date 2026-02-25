@@ -9,6 +9,7 @@ function Navigation() {
   const { cart } = useCart()
   const { data: session } = useSession()
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+  const isAdmin = session?.user?.role === 'admin'
   
   return (
     <nav className="bg-blue-900 text-white p-4">
@@ -16,17 +17,22 @@ function Navigation() {
         <Link href="/" className="text-2xl font-bold">Texas Undercarriage</Link>
         <div className="space-x-4 flex items-center">
           <Link href="/products" className="hover:underline">Products</Link>
-          {session && <Link href="/orders" className="hover:underline">Orders</Link>}
-          <Link href="/cart" className="hover:underline relative inline-block">
-            Cart
-            {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                {itemCount}
-              </span>
-            )}
-          </Link>
-          {session?.user?.role === 'admin' && (
-            <Link href="/admin" className="hover:underline">Admin</Link>
+          {session && !isAdmin && <Link href="/orders" className="hover:underline">Orders</Link>}
+          {!isAdmin && (
+            <Link href="/cart" className="hover:underline relative inline-block">
+              Cart
+              {itemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+          )}
+          {isAdmin && (
+            <>
+              <Link href="/admin/orders" className="hover:underline">Manage Orders</Link>
+              <Link href="/admin/products" className="hover:underline">Manage Products</Link>
+            </>
           )}
           {session ? (
             <span className="text-sm">{session.user?.email}</span>

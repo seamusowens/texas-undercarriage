@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useCart } from '../providers'
 
 type Product = {
@@ -16,11 +17,13 @@ type Product = {
 
 function ProductsContent() {
   const searchParams = useSearchParams()
+  const { data: session } = useSession()
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
   const [profile, setProfile] = useState(searchParams.get('profile') || '')
   const [addedToCart, setAddedToCart] = useState<string | null>(null)
   const { addToCart } = useCart()
+  const isAdmin = session?.user?.role === 'admin'
   
   useEffect(() => {
     fetch(`/api/products?search=${search}&profile=${profile}`)
@@ -71,16 +74,18 @@ function ProductsContent() {
             <p className="text-sm text-gray-600 mb-2">Supplier: {product.supplierName}</p>
             <div className="flex justify-between items-center">
               <span className="text-xl font-bold">${product.price}</span>
-              <button
-                onClick={() => handleAddToCart(product)}
-                className={`px-4 py-2 rounded transition ${
-                  addedToCart === product.id 
-                    ? 'bg-green-600 text-white' 
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}
-              >
-                {addedToCart === product.id ? '✓ Added!' : 'Add to Cart'}
-              </button>
+              {!isAdmin && (
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className={`px-4 py-2 rounded transition ${
+                    addedToCart === product.id 
+                      ? 'bg-green-600 text-white' 
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  {addedToCart === product.id ? '✓ Added!' : 'Add to Cart'}
+                </button>
+              )}
             </div>
           </div>
         ))}

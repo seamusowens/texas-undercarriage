@@ -1,6 +1,6 @@
 'use client'
-import { signIn } from 'next-auth/react'
-import { useState } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -8,6 +8,17 @@ export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
+  const { data: session } = useSession()
+  
+  useEffect(() => {
+    if (session?.user) {
+      if (session.user.role === 'admin') {
+        router.push('/admin/orders')
+      } else {
+        router.push('/products')
+      }
+    }
+  }, [session, router])
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,7 +28,10 @@ export default function SignIn() {
       redirect: false,
     })
     
-    if (result?.ok) router.push('/products')
+    if (result?.ok) {
+      // Redirect will be handled by useEffect after session updates
+      window.location.reload()
+    }
   }
   
   return (
