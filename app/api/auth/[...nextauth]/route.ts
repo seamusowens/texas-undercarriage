@@ -47,7 +47,7 @@ const handler = NextAuth({
     signIn: '/auth/signin',
   },
   session: { strategy: 'jwt' },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || 'texas-undercarriage-secret-2026-change-in-production',
 })
 
 export { handler as GET, handler as POST }
