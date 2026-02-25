@@ -3,8 +3,16 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
+const backgroundImages = [
+  '/images/Gemini_Generated_Image_xuul4vxuul4vxuul.png',
+  '/images/Gemini_Generated_Image_newjdwnewjdwnewj.png',
+  '/images/Gemini_Generated_Image_a99ca6a99ca6a99c.png',
+  '/images/Gemini_Generated_Image_pq03w5pq03w5pq03.png'
+]
+
 export default function Home() {
   const [categories, setCategories] = useState<Array<{ profile: string; count: number }>>([])
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     fetch('/api/products/categories')
@@ -16,10 +24,24 @@ export default function Home() {
       .catch(err => console.error('Error fetching categories:', err))
   }, [])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <div className="min-h-screen">
-      <div className="bg-blue-600 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
+      <div 
+        className="relative bg-blue-600 text-white py-20 transition-all duration-1000"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${backgroundImages[currentImageIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl font-bold mb-4">Texas Undercarriage</h1>
           <p className="text-xl mb-8">Premium Undercarriage Parts for Heavy Machinery</p>
           <Link href="/products" className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">
