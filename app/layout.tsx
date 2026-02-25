@@ -37,7 +37,7 @@ function Navigation() {
             </>
           )}
           {session ? (
-            <span className="text-xs md:text-sm text-gray-300 bg-gray-800 px-3 py-1 rounded">{session.user?.email}</span>
+            <Link href="/profile" className="text-xs md:text-sm text-gray-300 bg-gray-800 px-3 py-1 rounded hover:bg-gray-700">Profile</Link>
           ) : (
             <Link href="/auth/signin" className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded font-semibold transition shadow-lg">
               Sign In
