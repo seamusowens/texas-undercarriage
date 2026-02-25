@@ -17,6 +17,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([])
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({ partName: '', partNumber: '', price: 0, imageUrl: '' })
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.role === 'admin') {
@@ -30,6 +31,29 @@ export default function AdminProducts() {
     fetch('/api/products?search=&profile=')
       .then(res => res.json())
       .then(setProducts)
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData
+      })
+      const data = await res.json()
+      setFormData(prev => ({ ...prev, imageUrl: data.url }))
+    } catch (error) {
+      console.error('Upload failed:', error)
+      alert('Image upload failed')
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSave = async () => {
@@ -82,12 +106,22 @@ export default function AdminProducts() {
             onChange={e => setFormData({...formData, price: parseFloat(e.target.value)})}
             className="border p-2 rounded"
           />
-          <input
-            placeholder="Image URL"
-            value={formData.imageUrl}
-            onChange={e => setFormData({...formData, imageUrl: e.target.value})}
-            className="border p-2 rounded"
-          />
+          <div>
+            <label className="block text-sm font-semibold mb-2">Product Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={uploading}
+              className="border p-2 rounded w-full"
+            />
+            {uploading && <p className="text-sm text-gray-600 mt-1">Uploading...</p>}
+            {formData.imageUrl && (
+              <div className="mt-2">
+                <img src={formData.imageUrl} alt="Preview" className="h-32 object-cover rounded" />
+              </div>
+            )}
+          </div>
           <div className="flex gap-2">
             <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded">
               Save
